@@ -1,0 +1,16 @@
+instructions from https://openwrt.org/toh/fon/fonera
+
+log into redboot. this can be done over serial or over port 9000 if redboot was configured with an IP address at some point.
+
+(after atftpd installed and configured)
+
+ip_address -h 192.168.5.2 -l 192.168.5.254/24
+load -r -b %{FREEMEMLO} openwrt-atheros-vmlinux.lzma
+fis init
+fis create -e 0x80041000 -r 0x80041000 vmlinux.bin.l7
+load -r -b %{FREEMEMLO} openwrt-atheros-root.squashfs
+fis create rootfs
+reset
+
+
+

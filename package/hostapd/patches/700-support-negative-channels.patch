@@ -1,0 +1,51 @@
+--- a/src/ap/ap_config.h
++++ b/src/ap/ap_config.h
+@@ -488,7 +488,7 @@
+ 	int rts_threshold;
+ 	int fragm_threshold;
+ 	u8 send_probe_response;
+-	u8 channel;
++	int channel;
+ 	enum hostapd_hw_mode hw_mode; /* HOSTAPD_MODE_IEEE80211A, .. */
+ 	enum {
+ 		LONG_PREAMBLE = 0,
+--- a/src/common/ieee802_11_common.c
++++ b/src/common/ieee802_11_common.c
+@@ -495,10 +495,14 @@
+ }
+ 
+ 
+-enum hostapd_hw_mode ieee80211_freq_to_chan(int freq, u8 *channel)
++enum hostapd_hw_mode ieee80211_freq_to_chan(int freq, short *channel)
+ {
+ 	enum hostapd_hw_mode mode = NUM_HOSTAPD_MODES;
+ 
++	if (freq >= 2312 && freq < 2412) {
++		mode = HOSTAPD_MODE_IEEE80211G;
++		*channel = (freq - 2407) / 5;
++	} else
+ 	if (freq >= 2412 && freq <= 2472) {
+ 		mode = HOSTAPD_MODE_IEEE80211G;
+ 		*channel = (freq - 2407) / 5;
+--- a/src/common/ieee802_11_common.h
++++ b/src/common/ieee802_11_common.h
+@@ -101,7 +101,7 @@
+ 
+ int hostapd_config_wmm_ac(struct hostapd_wmm_ac_params wmm_ac_params[],
+ 			  const char *name, const char *val);
+-enum hostapd_hw_mode ieee80211_freq_to_chan(int freq, u8 *channel);
++enum hostapd_hw_mode ieee80211_freq_to_chan(int freq, short *channel);
+ 
+ int supp_rates_11b_only(struct ieee802_11_elems *elems);
+ 
+--- a/src/drivers/driver_nl80211.c
++++ b/src/drivers/driver_nl80211.c
+@@ -5747,7 +5747,7 @@
+ 			  struct hostapd_channel_data *chan,
+ 			  struct nlattr *tb_freq[])
+ {
+-	u8 channel;
++	short channel;
+ 	chan->freq = nla_get_u32(tb_freq[NL80211_FREQUENCY_ATTR_FREQ]);
+ 	chan->flag = 0;
+ 	if (ieee80211_freq_to_chan(chan->freq, &channel) != NUM_HOSTAPD_MODES)

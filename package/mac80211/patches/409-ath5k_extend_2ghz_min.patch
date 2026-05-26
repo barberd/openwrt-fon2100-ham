@@ -1,0 +1,9 @@
+--- a/drivers/net/wireless/ath/ath5k/caps.c
++++ b/drivers/net/wireless/ath/ath5k/caps.c
+@@ -83,7 +83,7 @@
+ 		     ah->ah_version != AR5K_AR5211)) {
+-			/* 2312 */
+-			caps->cap_range.range_2ghz_min = 2412;
++			/* 2312 - extended for ham radio use */
++			caps->cap_range.range_2ghz_min = 2312;
+ 			caps->cap_range.range_2ghz_max = 2732;

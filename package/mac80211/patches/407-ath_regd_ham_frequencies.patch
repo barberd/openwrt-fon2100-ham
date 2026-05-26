@@ -1,0 +1,25 @@
+--- a/net/wireless/reg.c
++++ b/net/wireless/reg.c
+@@ -219,7 +219,9 @@
+ static const struct ieee80211_regdomain world_regdom = {
+-	.n_reg_rules = 6,
++	.n_reg_rules = 7,
+ 	.alpha2 =  "00",
+ 	.reg_rules = {
+-		/* IEEE 802.11b/g, channels 1..11 */
+-		REG_RULE(2412-10, 2462+10, 40, 6, 20, 0),
++		/* Ham radio 13cm band 2312-2390 */
++		REG_RULE(2312, 2390, 40, 6, 30, 0),
++		/* IEEE 802.11b/g, channels 1..11 + ham 2390-2450 */
++		REG_RULE(2390, 2462+10, 40, 6, 30, 0),
+ 		/* IEEE 802.11b/g, channels 12..13. */
+--- a/drivers/net/wireless/ath/regd.c
++++ b/drivers/net/wireless/ath/regd.c
+@@ -36,5 +36,5 @@
+-#define ATH9K_2GHZ_CH01_11	REG_RULE(2412-10, 2462+10, 40, 0, 20, 0)
++#define ATH9K_2GHZ_CH01_11	REG_RULE(2312, 2462+10, 40, 0, 30, 0)
+ 
+ /* We enable active scan on these a case by case basis by regulatory domain */
+-#define ATH9K_2GHZ_CH12_13	REG_RULE(2467-10, 2472+10, 40, 0, 20,\
++#define ATH9K_2GHZ_CH12_13	REG_RULE(2467-10, 2732, 40, 0, 30,\
+ 				 NL80211_RRF_NO_IR)

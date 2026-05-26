@@ -1,0 +1,11 @@
+--- a/drivers/net/wireless/ath/ath5k/base.c
++++ b/drivers/net/wireless/ath/ath5k/base.c
+@@ -3059,7 +3059,9 @@
+ 	}
+ 
++#ifndef CPTCFG_ATH_USER_REGD
+ 	if (!ath_is_world_regd(regulatory))
+ 		regulatory_hint(hw->wiphy, regulatory->alpha2);
++#endif
+ 
+ 	ath5k_init_leds(ah);
