@@ -1,0 +1,27 @@
+<html>
+<head>
+  <title>$gatewayname</title>
+  <meta HTTP-EQUIV="Pragma" CONTENT="no-cache">
+</head>
+<body bgcolor="#DDDDDD" text="#000000">
+<table border="0" cellpadding="2" cellspacing="0" width="100%">
+<tr>
+  <td align="center">
+    <h2>$gatewayname</h2>
+    <p>This is a Part 97 amateur radio network.<br>
+    Access requires a valid amateur radio license.</p>
+    <form method="GET" action="$authtarget">
+      <label for="callsign"><b>Enter your callsign:</b></label><br><br>
+      <input type="text" name="callsign" id="callsign" size="10" maxlength="10"
+             style="text-transform:uppercase; font-size:16pt; text-align:center">
+      <br><br>
+      <input type="submit" value="Connect">
+    </form>
+    <p><small>By connecting you agree to comply with all FCC Part 97 rules,<br>
+    including: no encryption, no obscenity, no broadcasting,<br>
+    no music, no commercial traffic, and proper station identification.</small></p>
+  </td>
+</tr>
+</table>
+</body>
+</html>

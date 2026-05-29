@@ -49,3 +49,13 @@
  	chan->freq = nla_get_u32(tb_freq[NL80211_FREQUENCY_ATTR_FREQ]);
  	chan->flag = 0;
  	if (ieee80211_freq_to_chan(chan->freq, &channel) != NUM_HOSTAPD_MODES)
+--- a/src/ap/beacon.c
++++ b/src/ap/beacon.c
+@@ -79,6 +79,8 @@
+ static u8 * hostapd_eid_ds_params(struct hostapd_data *hapd, u8 *eid)
+ {
++	if (hapd->iconf->channel < 1)
++		return eid;
+ 	*eid++ = WLAN_EID_DS_PARAMS;
+ 	*eid++ = 1;
+ 	*eid++ = hapd->iconf->channel;
