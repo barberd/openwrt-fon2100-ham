@@ -172,6 +172,24 @@ Bandwidth modes available via debugfs (5/10/20/40 MHz):
   (also settable via UCI: wireless.radio0.chanbw='10')
 
 Runtime Configuration Notes
+Captive Portal (nodogsplash)
+----------------------------
+nodogsplash is installed and configured but NOT enabled by default.
+It provides a captive portal splash page informing users this is a
+Part 97 amateur radio network.
+
+To enable (persists across reboots):
+  /etc/init.d/nodogsplash enable
+  /etc/init.d/nodogsplash start
+
+To disable:
+  /etc/init.d/nodogsplash stop
+  /etc/init.d/nodogsplash disable
+
+Configuration: /etc/nodogsplash/nodogsplash.conf
+Splash page: /etc/nodogsplash/htdocs/splash.html
+GatewayInterface is set to wlan0.
+
 ---------------------------
 uhttpd (LuCI web server):
   - Default script_timeout increased to 120s (183 MHz CPU is slow)
