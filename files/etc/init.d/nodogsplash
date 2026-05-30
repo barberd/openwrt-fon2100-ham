@@ -54,7 +54,7 @@ status() {
 test_module() {
 
     ### Test ipt_mark with iptables
-    test_ipt_mark () {
+    test_xt_mark () {
 	($IPT -A FORWARD -m mark --mark 2 -j ACCEPT 2>&1) > /dev/null
 	IPTABLES_OK=$?
 	if [ "$IPTABLES_OK" -eq 0 ]; then
@@ -65,7 +65,7 @@ test_module() {
 	fi
     }
     ### Test ipt_mac with iptables
-    test_ipt_mac () {
+    test_xt_mac () {
 	($IPT -A INPUT -m mac --mac-source 00:00:00:00:00:00 -j ACCEPT 2>&1) > /dev/null
 	IPTABLES_OK=$?
 	if [ "$IPTABLES_OK" -eq 0 ]; then
@@ -136,6 +136,7 @@ test_module() {
         return 1
       fi
     }
+
 
     ### Test functionality of a module; load if necessary
     do_module_tests () {
