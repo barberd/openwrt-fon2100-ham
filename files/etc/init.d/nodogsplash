@@ -13,7 +13,7 @@
 
 IPT=/usr/sbin/iptables
 WD_DIR=/usr/bin
-OPTIONS=""
+OPTIONS="-s -d 5"
 START=65
 STOP=65
 # -s -d 5 runs in background, with level 5 (not so verbose) messages to syslog

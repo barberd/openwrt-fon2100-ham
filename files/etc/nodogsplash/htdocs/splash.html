@@ -10,7 +10,7 @@
     <h2>$gatewayname</h2>
     <p>This is a Part 97 amateur radio network.<br>
     Access requires a valid amateur radio license.</p>
-    <form method="GET" action="$authtarget">
+    <form method="GET" action="$authtarget" onsubmit="return logCallsign()">
       <label for="callsign"><b>Enter your callsign:</b></label><br><br>
       <input type="text" name="callsign" id="callsign" size="10" maxlength="10"
              style="text-transform:uppercase; font-size:16pt; text-align:center">
@@ -23,5 +23,14 @@
   </td>
 </tr>
 </table>
+<script>
+function logCallsign() {
+  var cs = document.getElementById('callsign').value.toUpperCase();
+  var img = new Image();
+  img.onload = img.onerror = function() { document.forms[0].submit(); };
+  img.src = 'http://$gatewayaddress/cgi-bin/log_auth.sh?callsign=' + cs;
+  return false;
+}
+</script>
 </body>
 </html>
