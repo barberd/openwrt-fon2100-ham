@@ -17,4 +17,5 @@
 .#*
 *#
 .emacs.desktop*
-TAGS*~build.log
+TAGS*~
+build.log
