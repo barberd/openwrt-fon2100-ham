@@ -31,7 +31,7 @@ US Ham Radio Context (13cm band)
 - Usable ham range on this hardware: 2390-2450 MHz (overlaps Wi-Fi ch 1+)
 - Part 97 requirements: no encryption, must ID with callsign (SSID works)
 - AREDN/HSMM convention: negative channel numbers below ch 1 (5 MHz spacing)
-  e.g. ch -2 = 2397 MHz center, ch -4 = 2387 MHz center
+  e.g. ch -2 = 2397 MHz center, ch -1 = 2402 MHz center
 
 Why This Build Exists
 ---------------------
@@ -157,27 +157,33 @@ Usage
 After flashing, set channel via UCI:
 
 AP Mode (managed):
-  uci set wireless.radio0.channel='-2'
-  uci set wireless.radio0.chanbw='10'
-  uci set wireless.radio0.disabled='0'
-  uci set wireless.@wifi-iface[0].mode='ap'
-  uci set wireless.@wifi-iface[0].ssid='YOURCALL-2397'
-  uci set wireless.@wifi-iface[0].encryption='none'
-  uci set wireless.@wifi-iface[0].macaddr='XX:XX:XX:XX:XX:XX'
-  uci commit wireless
-  wifi
+
+```
+uci set wireless.radio0.channel='-2'
+uci set wireless.radio0.chanbw='10'
+uci set wireless.radio0.disabled='0'
+uci set wireless.@wifi-iface[0].mode='ap'
+uci set wireless.@wifi-iface[0].ssid='YOURCALL-2397'
+uci set wireless.@wifi-iface[0].encryption='none'
+uci set wireless.@wifi-iface[0].macaddr='XX:XX:XX:XX:XX:XX'
+uci commit wireless
+wifi
+```
 
 Ad-Hoc Mode (IBSS):
-  uci set wireless.radio0.channel='-2'
-  uci set wireless.radio0.chanbw='10'
-  uci set wireless.radio0.disabled='0'
-  uci set wireless.@wifi-iface[0].mode='adhoc'
-  uci set wireless.@wifi-iface[0].ssid='YOURCALL-2397'
-  uci set wireless.@wifi-iface[0].encryption='none'
-  uci set wireless.@wifi-iface[0].bssid='XX:XX:XX:XX:XX:XX'
-  uci set wireless.@wifi-iface[0].macaddr='XX:XX:XX:XX:XX:XX'
-  uci commit wireless
-  wifi
+
+```
+uci set wireless.radio0.channel='-2'
+uci set wireless.radio0.chanbw='10'
+uci set wireless.radio0.disabled='0'
+uci set wireless.@wifi-iface[0].mode='adhoc'
+uci set wireless.@wifi-iface[0].ssid='YOURCALL-2397'
+uci set wireless.@wifi-iface[0].encryption='none'
+uci set wireless.@wifi-iface[0].bssid='XX:XX:XX:XX:XX:XX'
+uci set wireless.@wifi-iface[0].macaddr='XX:XX:XX:XX:XX:XX'
+uci commit wireless
+wifi
+```
 
 Ad-hoc mode is commonly used on ham-only frequencies and is compatible
 with AREDN mesh networks. All nodes on the same channel must share the
@@ -187,8 +193,12 @@ Channel -2 = 2397 MHz center (formula: 2407 + channel*5)
 At 10 MHz bandwidth: spans 2392-2402 MHz
 
 Bandwidth modes available via debugfs (5/10/20/40 MHz):
-  echo "10" > /sys/kernel/debug/ieee80211/phy0/ath5k/bwmode
-  (also settable via UCI: wireless.radio0.chanbw='10')
+
+```
+echo "10" > /sys/kernel/debug/ieee80211/phy0/ath5k/bwmode
+```
+
+(also settable via UCI: `wireless.radio0.chanbw='10'`)
 
 Runtime Configuration Notes
 Captive Portal (nodogsplash)
@@ -220,35 +230,44 @@ AREDN-supported device with their official firmware.
 Minimum setup to join an AREDN mesh:
 
 1. Set ad-hoc mode with AREDN BSSID convention:
-  uci set wireless.radio0.channel='-2'
-  uci set wireless.radio0.chanbw='10'
-  uci set wireless.@wifi-iface[0].mode='adhoc'
-  uci set wireless.@wifi-iface[0].ssid='AREDN-2397-10'
-  uci set wireless.@wifi-iface[0].bssid='02:CA:FF:EE:BA:BE'
-  uci set wireless.@wifi-iface[0].encryption='none'
-  uci commit wireless
-  wifi
+
+```
+uci set wireless.radio0.channel='-2'
+uci set wireless.radio0.chanbw='10'
+uci set wireless.@wifi-iface[0].mode='adhoc'
+uci set wireless.@wifi-iface[0].ssid='AREDN-2397-10'
+uci set wireless.@wifi-iface[0].bssid='02:CA:FF:EE:BA:BE'
+uci set wireless.@wifi-iface[0].encryption='none'
+uci commit wireless
+wifi
+```
 
 2. Set the mesh IP address (derived from MAC, 10.x.x.x/8):
-  # Convention: 10.(mac[3]).(mac[4]).(mac[5])/8 (hex to decimal)
-  # Example for MAC AA:BB:CC:11:22:33: 10.17.34.51 (0x11=17, 0x22=34, 0x33=51)
-  ifconfig wlan0 10.17.34.51 netmask 255.0.0.0
+
+```
+# Convention: 10.(mac[3]).(mac[4]).(mac[5])/8 (hex to decimal)
+# Example for MAC AA:BB:CC:11:22:33: 10.17.34.51 (0x11=17, 0x22=34, 0x33=51)
+ifconfig wlan0 10.17.34.51 netmask 255.0.0.0
+```
 
 3. Install and run babeld for mesh routing:
-  # Allow memory overcommit (needed for opkg on 16MB RAM devices):
-  echo 1 > /proc/sys/vm/overcommit_memory
-  opkg install babeld
 
-  # Enable IP forwarding:
-  uci set network.@globals[0].ip_forward='1'
-  uci commit network
+```
+# Allow memory overcommit (needed for opkg on 16MB RAM devices):
+echo 1 > /proc/sys/vm/overcommit_memory
+opkg install babeld
 
-  # Configure /etc/babeld.conf:
-  interface wlan0
+# Enable IP forwarding:
+uci set network.@globals[0].ip_forward='1'
+uci commit network
 
-  # Start:
-  /etc/init.d/babeld enable
-  /etc/init.d/babeld start
+# Configure /etc/babeld.conf:
+interface wlan0
+
+# Start:
+/etc/init.d/babeld enable
+/etc/init.d/babeld start
+```
 
 The babeld package (v1.3.2) in the OpenWrt AA archive is wire-protocol
 compatible with newer versions used by current AREDN nodes. The node
